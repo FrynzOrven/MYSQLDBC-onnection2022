@@ -15,4 +15,36 @@ Public Class Form1
             conn.Close()
         End Try
     End Sub
+
+    Private Sub Login_Click(sender As Object, e As EventArgs) Handles Login.Click
+        conn = New MySqlConnection
+        conn.ConnectionString = "server=localhost;userid=root;password='';database=test"
+        Dim READER As MySqlDataReader
+        Try
+            conn.Open()
+            Dim Query As String
+            Query = "select * from test.edata where user_name='" & TextBox_UN.Text & "' and password='" & TextBox_PASS.Text & "'"
+            COMMAND = New MySqlCommand(Query, conn)
+            READER = COMMAND.ExecuteReader
+            Dim count As Integer
+            count = 0
+            While READER.Read
+                count = count + 1
+            End While
+
+            If count = 1 Then
+                MessageBox.Show("Username and password are correct")
+            ElseIf count > 1 Then
+                MessageBox.Show("Username and password are Duplicatte")
+            Else
+                MessageBox.Show("Username and password are not correct")
+
+            End If
+
+            conn.Close()
+        Catch ex As Exception
+            MsgBox(ex.Message)
+            conn.Close()
+        End Try
+    End Sub
 End Class
